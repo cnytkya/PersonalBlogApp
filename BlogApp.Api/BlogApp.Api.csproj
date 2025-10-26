@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\BlogApp.ApplicationLayer\BlogApp.ApplicationLayer.csproj" />
     <ProjectReference Include="..\BlogApp.DataLayer\BlogApp.DataLayer.csproj" />
   </ItemGroup>
 

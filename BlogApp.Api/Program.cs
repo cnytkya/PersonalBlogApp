@@ -1,3 +1,6 @@
+using BlogApp.ApplicationLayer;
+using BlogApp.ApplicationLayer.Services;
+using BlogApp.ApplicationLayer.Services.Interface;
 using BlogApp.DataLayer.DI;
 using BlogApp.DataLayer.Persistence;
 using BlogApp.DataLayer.SeedData;
@@ -17,6 +20,9 @@ builder.Services.AddControllers();
 //});bunu extend metot ile geniþlettik. artýk bunu PersistenceServiceRegistration class'ýndan çaðýracaðýz.
 
 builder.Services.AddPersistenceServices(builder.Configuration);
+builder.Services.AddApplicationServices();
+
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
