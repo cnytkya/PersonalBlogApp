@@ -1,3 +1,4 @@
+using BlogApp.DataLayer.DI;
 using BlogApp.DataLayer.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,6 +15,7 @@ builder.Services.AddControllers();
 //    options.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnection"));
 //});bunu extend metot ile geniþlettik. artýk bunu PersistenceServiceRegistration class'ýndan çaðýracaðýz.
 
+builder.Services.AddPersistenceServices(builder.Configuration);
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
