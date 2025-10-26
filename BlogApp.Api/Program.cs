@@ -1,9 +1,18 @@
+using BlogApp.DataLayer.Persistence;
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
+
+builder.Services.AddDbContext<AppDbContext>(options =>
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("sqlconnection"));
+});
+
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
