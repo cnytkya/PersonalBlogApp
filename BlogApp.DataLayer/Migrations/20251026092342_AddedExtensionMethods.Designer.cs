@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace BlogApp.DataLayer.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251025103221_Mig1")]
-    partial class Mig1
+    [Migration("20251026092342_AddedExtensionMethods")]
+    partial class AddedExtensionMethods
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

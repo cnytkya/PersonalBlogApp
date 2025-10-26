@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace BlogApp.DataLayer.Migrations
 {
     /// <inheritdoc />
-    public partial class Mig1 : Migration
+    public partial class AddedExtensionMethods : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
