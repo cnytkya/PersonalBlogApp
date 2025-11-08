@@ -1,0 +1,130 @@
+<!-- Hero Section -->
+<section class="bg-gradient-to-br from-blue-50 to-amber-50 py-20">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h1 class="text-5xl md:text-6xl font-bold text-gray-800 mb-6">
+        Düşüncelerinizi
+        <span class="bg-gradient-to-r from-blue-500 to-amber-400 bg-clip-text text-transparent">
+          Paylaşın
+        </span>
+      </h1>
+      <p class="text-xl text-gray-600 mb-8 leading-relaxed">
+        BlogApp ile bilgi birikiminizi paylaşın, yeni fikirler keşfedin ve ilham verici topluluğumuzun bir parçası olun.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a 
+          routerLink="/register" 
+          class="px-8 py-4 bg-gradient-to-r from-blue-500 to-amber-400 text-white font-semibold rounded-lg shadow-lg hover:shadow-xl transform hover:-translate-y-1 transition-all duration-300"
+        >
+          Hemen Başla
+          <i class="fas fa-arrow-right ml-2"></i>
+        </a>
+        <a 
+          routerLink="/blogs" 
+          class="px-8 py-4 border border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition-all duration-300"
+        >
+          Blogları Keşfet
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-20 bg-white">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Neden BlogApp?</h2>
+      <p class="text-xl text-gray-600 max-w-2xl mx-auto">
+        Modern özelliklerimiz ve kullanıcı dostu arayüzümüz ile yazma deneyiminizi en üst düzeye çıkarın.
+      </p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <div 
+        *ngFor="let feature of features" 
+        class="group p-6 bg-white rounded-xl shadow-lg hover:shadow-xl border border-gray-100 hover:border-blue-200 transition-all duration-300 transform hover:-translate-y-2"
+      >
+        <div class="w-14 h-14 bg-gradient-to-r from-blue-500 to-amber-400 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
+          <i class="{{feature.icon}} text-white text-xl"></i>
+        </div>
+        <h3 class="text-xl font-semibold text-gray-800 mb-3">{{feature.title}}</h3>
+        <p class="text-gray-600 leading-relaxed">{{feature.description}}</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Recent Posts Section -->
+<section class="py-20 bg-gray-50">
+  <div class="container mx-auto px-4">
+    <div class="text-center mb-16">
+      <h2 class="text-4xl font-bold text-gray-800 mb-4">Son Blog Yazıları</h2>
+      <p class="text-xl text-gray-600">Topluluğumuzdan en güncel içerikler</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      <div 
+        *ngFor="let post of recentPosts" 
+        class="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300 transform hover:-translate-y-2"
+      >
+        <div class="p-6">
+          <div class="flex items-center justify-between mb-4">
+            <span class="px-3 py-1 bg-blue-100 text-blue-600 text-sm font-medium rounded-full">
+              {{post.category}}
+            </span>
+            <span class="text-sm text-gray-500">{{post.date}}</span>
+          </div>
+          <h3 class="text-xl font-bold text-gray-800 mb-3 hover:text-blue-500 transition-colors duration-300 cursor-pointer">
+            {{post.title}}
+          </h3>
+          <p class="text-gray-600 mb-4 leading-relaxed">
+            {{post.excerpt}}
+          </p>
+          <div class="flex items-center justify-between">
+            <div class="flex items-center space-x-2">
+              <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-amber-400 rounded-full flex items-center justify-center">
+                <span class="text-white text-sm font-semibold">{{post.author.charAt(0)}}</span>
+              </div>
+              <span class="text-sm text-gray-700">{{post.author}}</span>
+            </div>
+            <a href="#" class="text-blue-500 hover:text-blue-600 text-sm font-medium transition-colors duration-300">
+              Devamını Oku <i class="fas fa-arrow-right ml-1"></i>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="text-center mt-12">
+      <a 
+        routerLink="/blogs" 
+        class="inline-flex items-center px-6 py-3 border border-blue-500 text-blue-500 font-semibold rounded-lg hover:bg-blue-500 hover:text-white transition-all duration-300"
+      >
+        Tüm Blogları Gör
+        <i class="fas fa-arrow-right ml-2"></i>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Section -->
+<section class="py-20 bg-gradient-to-r from-blue-500 to-amber-400">
+  <div class="container mx-auto px-4">
+    <div class="max-w-4xl mx-auto text-center">
+      <h2 class="text-4xl font-bold text-white mb-6">
+        Hikayenizi Paylaşmaya Hazır mısınız?
+      </h2>
+      <p class="text-xl text-blue-50 mb-8">
+        Binlerce okuyucuya ulaşın ve topluluğumuzun bir parçası olun.
+      </p>
+      <a 
+        routerLink="/register" 
+        class="inline-flex items-center px-8 py-4 bg-white text-blue-500 font-bold rounded-lg shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300"
+      >
+        <i class="fas fa-user-plus mr-3"></i>
+        Ücretsiz Kayıt Ol
+      </a>
+    </div>
+  </div>
+</section>

@@ -1,10 +1,6 @@
 using BlogApp.ApplicationLayer;
-using BlogApp.ApplicationLayer.Services;
-using BlogApp.ApplicationLayer.Services.Interface;
 using BlogApp.DataLayer.DI;
-using BlogApp.DataLayer.Persistence;
 using BlogApp.DataLayer.SeedData;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 

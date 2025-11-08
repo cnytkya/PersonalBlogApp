@@ -9,10 +9,10 @@ namespace BlogApp.ApplicationLayer.Services
     public class UserService : IUserService
     {
         private readonly UserManager<AppUser> _userManager;
-        // YENİ: Rolleri kontrol etmek için RoleManager'a ihtiyacımız var
+        // Rolleri kontrol etmek için RoleManager'a ihtiyacımız var
         private readonly RoleManager<IdentityRole> _roleManager;
 
-        // YENİ: Constructor'a RoleManager eklendi
+        // Constructor'a RoleManager eklendi
         public UserService(UserManager<AppUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _userManager = userManager;
@@ -87,13 +87,10 @@ namespace BlogApp.ApplicationLayer.Services
 
                 // Belirlenen rolü kullanıcıya ata
                 await _userManager.AddToRoleAsync(newUser, roleToAssign);
-                // --- BİTTİ ---
             }
 
             return result;
         }
-
-        // GÜNCELLENMEDİ (Aynı kaldı)
         public async Task<IdentityResult> UpdateUserAsync(string userId, UpdateUserDto updateUserDto)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -109,7 +106,6 @@ namespace BlogApp.ApplicationLayer.Services
             return await _userManager.UpdateAsync(user);
         }
 
-        // GÜNCELLENMEDİ (Aynı kaldı)
         public async Task<IdentityResult> DeleteUserAsync(string userId)
         {
             var user = await _userManager.FindByIdAsync(userId);
@@ -120,7 +116,7 @@ namespace BlogApp.ApplicationLayer.Services
             return await _userManager.DeleteAsync(user);
         }
 
-        // --- HELPER METOT (Değişiklik yok) ---
+        // --- HELPER METOT 
         private async Task<UserDto> MapUserToDto(AppUser user)
         {
             return new UserDto
