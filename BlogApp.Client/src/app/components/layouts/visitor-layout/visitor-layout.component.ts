@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
-import { VisitorHeaderComponent } from "../../pages/visitor-header/visitor-header.component";
-import { VisitorFooterComponent } from "../../pages/visitor-footer/visitor-footer.component";
+import { VisitorHeaderComponent } from "./pages/visitor-header/visitor-header.component";
+import { VisitorFooterComponent } from "./pages/visitor-footer/visitor-footer.component";
 import { RouterOutlet } from '@angular/router';
 
 @Component({
