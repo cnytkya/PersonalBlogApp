@@ -4,42 +4,75 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+// YENİ using'ler
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using BlogApp.ApplicationLayer.Services.Interface;
+using BlogApp.ApplicationLayer.Services;
 
 namespace BlogApp.DataLayer.DI
 {
-    // Sınıfın static olması önemli
     public static class PersistenceServiceRegistration
     {
-        // 'this IServiceCollection services' ifadesi, bu metodun bir extension metot olduğunu belirtir.
         public static IServiceCollection AddPersistenceServices(this IServiceCollection services, IConfiguration configuration)
         {
-            // 1. AppDbContext'i SQL Server'a bağlayın
-            // Connection string'i "sqlconnection" adıyla appsettings.json'dan okuyacak
+            // 1. AppDbContext (Değişiklik yok)
             services.AddDbContext<AppDbContext>(options =>
-            {
-                options.UseSqlServer(configuration.GetConnectionString("sqlconnection"));
-            });
+                options.UseSqlServer(
+                    configuration.GetConnectionString("sqlconnection")));
 
-            // 2. ASP.NET Identity Servislerini Ekleyin
-            // AppUser ve varsayılan rol (IdentityRole) sınıfımızı kullanarak Identity'yi yapılandırıyoruz.
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITokenService, TokenService>();
+
+            // 2. Identity Servisleri (GÜNCELLENDİ)
             services.AddIdentity<AppUser, IdentityRole>(options =>
             {
-                // Geliştirme ortamı için parola kurallarını basit tutabiliriz.
                 options.Password.RequireDigit = false;
                 options.Password.RequireLowercase = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequiredLength = 6;
             })
-            // Identity'nin EF Core ve AppDbContext'i kullanacağını belirtiyoruz
             .AddEntityFrameworkStores<AppDbContext>()
-            // Parola sıfırlama, e-posta onayı vb. için token provider'ları ekliyoruz
+            .AddDefaultTokenProviders()
+            // YENİ: Identity'ye varsayılan şemaların (örn: cookie) yerine
+            // bizim belirlediğimiz JWT şemasını kullanmasını söylüyoruz.
             .AddDefaultTokenProviders();
-            // İleride Repository'leriniz olursa onları da burada ekleyebilirsiniz:
-            // services.AddScoped<IBlogRepository, BlogRepository>();
-            // services.AddScoped<ICategoryRepository, CategoryRepository>();
 
-            return services; // Metot zincirlemesi (chaining) için IServiceCollection döndürülür
+            // 3. JWT Authentication Servisi (YENİ EKLENDİ)
+            services.AddAuthentication(options =>
+            {
+                // Kimlik doğrulama için varsayılan şema
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                // Yetki sorgulaması (Challenge) için varsayılan şema
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                // Diğer tüm durumlar için
+                options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            // JWT Bearer şemasını yapılandır
+            .AddJwtBearer(options =>
+            {
+                options.SaveToken = true; // Token'ı HttpContext'te sakla
+                options.RequireHttpsMetadata = false; // (Development'ta false, Production'da true olmalı)
+
+                // Token'ın nasıl doğrulanacağını belirtir
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true, // Yayıncıyı doğrula
+                    ValidateAudience = true, // Hedef kitleyi doğrula
+
+                    // appsettings'den değerleri al
+                    ValidAudience = configuration["Jwt:Audience"],
+                    ValidIssuer = configuration["Jwt:Issuer"],
+
+                    // Token'ı imzalayan anahtarı doğrula
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                };
+            });
+
+            return services;
         }
     }
 }
