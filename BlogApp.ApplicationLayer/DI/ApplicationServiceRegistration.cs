@@ -10,6 +10,7 @@ namespace BlogApp.ApplicationLayer
         {
             // Servislerimizi Scoped olarak kaydediyoruz
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             // İleride AutoMapper eklersek buraya ekleyeceğiz
             // services.AddAutoMapper(Assembly.GetExecutingAssembly());

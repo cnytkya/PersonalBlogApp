@@ -1,0 +1,37 @@
+<!-- 
+  Tailwind ile yatay Topbar.
+  bg-white: Beyaz arkaplan
+  shadow-md: Alt gölge
+-->
+<header class="h-16 bg-white shadow-md flex items-center justify-between px-6">
+  
+  <!-- Sol Taraf (Arama Çubuğu - Placeholder) -->
+  <div class="relative">
+    <input 
+      type="text" 
+      placeholder="Arama yap..."
+      class="w-full sm:w-64 px-4 py-2 pl-10 border border-gray-300 rounded-full focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
+    >
+    <i class="fas fa-search absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+  </div>
+
+  <!-- Sağ Taraf (Kullanıcı Menüsü) -->
+  <div class="flex items-center space-x-4">
+    
+    <!-- Profil Linki (Topbar'dan da profile gidilebilir) -->
+    <a routerLink="/admin/profile" class="flex items-center text-gray-700 hover:text-blue-500 transition-colors">
+      <i class="fas fa-user-circle text-2xl mr-2"></i>
+      <!-- İleride buraya 'authService.currentUser.firstName' gelebilir -->
+      <span class="hidden sm:inline">Admin User</span>
+    </a>
+
+    <!-- Çıkış Yap Butonu -->
+    <button 
+      (click)="logout()"
+      title="Çıkış Yap"
+      class="text-gray-500 hover:text-red-500 transition-colors text-2xl">
+      <i class="fas fa-sign-out-alt"></i>
+    </button>
+  </div>
+
+</header>

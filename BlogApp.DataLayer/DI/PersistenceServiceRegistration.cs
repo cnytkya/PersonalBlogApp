@@ -8,8 +8,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using BlogApp.ApplicationLayer.Services.Interface;
-using BlogApp.ApplicationLayer.Services;
 
 namespace BlogApp.DataLayer.DI
 {
@@ -22,8 +20,6 @@ namespace BlogApp.DataLayer.DI
                 options.UseSqlServer(
                     configuration.GetConnectionString("sqlconnection")));
 
-            services.AddScoped<IUserService, UserService>();
-            services.AddScoped<ITokenService, TokenService>();
 
             // 2. Identity Servisleri (GÜNCELLENDİ)
             services.AddIdentity<AppUser, IdentityRole>(options =>

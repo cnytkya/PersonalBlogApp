@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,5 +21,7 @@ namespace BlogApp.ApplicationLayer.DTOs.Auth
         public string? Email { get; set; }
         public string? FirstName { get; set; }
         public List<string>? Roles { get; set; }
+
+        public IEnumerable<IdentityError>? Errors { get; set; }
     }
 }

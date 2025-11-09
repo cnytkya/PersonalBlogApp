@@ -1,18 +1,8 @@
 <div class="min-h-screen bg-gradient-to-br from-blue-50 to-amber-50 py-12 px-4 sm:px-6 lg:px-8">
   <div class="max-w-md mx-auto">
-    <!-- Logo -->
     <div class="text-center mb-8">
       <a routerLink="/" class="inline-flex items-center space-x-2 group">
-        <div class="relative">
-          <div class="w-12 h-12 bg-gradient-to-r from-blue-500 to-amber-400 rounded-lg flex items-center justify-center transform group-hover:rotate-12 transition-transform duration-300">
-            <i class="fas fa-blog text-white text-xl"></i>
-          </div>
-          <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full animate-pulse"></span>
-        </div>
-        <span class="text-3xl font-bold bg-gradient-to-r from-blue-500 to-amber-400 bg-clip-text text-transparent">
-          Blog<span class="text-gray-800">App</span>
-        </span>
-      </a>
+        </a>
       <h2 class="mt-6 text-3xl font-bold text-gray-900">Hesabınıza Giriş Yapın</h2>
       <p class="mt-2 text-sm text-gray-600">
         Veya
@@ -22,34 +12,39 @@
       </p>
     </div>
 
-    <!-- Login Form -->
     <div class="bg-white py-8 px-6 shadow-xl rounded-xl border border-gray-100">
+      
+      <div 
+        *ngIf="authError" 
+        class="mb-4 bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg" 
+        role="alert">
+        <span class="block sm:inline">{{ authError }}</span>
+      </div>
+
       <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="space-y-6">
-        <!-- Email -->
+        
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700 mb-2">
-            E-posta Adresi
+          <label for="usernameOrEmail" class="block text-sm font-medium text-gray-700 mb-2">
+            Kullanıcı Adı veya E-posta
           </label>
           <div class="relative">
             <input
-              id="email"
-              type="email"
-              formControlName="email"
+              id="usernameOrEmail"
+              type="text" 
+              formControlName="usernameOrEmail"
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all duration-300"
-              placeholder="ornek@email.com"
-              [class.border-red-300]="email?.invalid && email?.touched"
-              [class.focus:ring-red-500]="email?.invalid && email?.touched"
-              [class.focus:border-red-500]="email?.invalid && email?.touched"
+              placeholder="kullanici_adiniz VEYA ornek@email.com"
+              [class.border-red-300]="usernameOrEmail?.invalid && usernameOrEmail?.touched"
+              [class.focus:ring-red-500]="usernameOrEmail?.invalid && usernameOrEmail?.touched"
+              [class.focus:border-red-500]="usernameOrEmail?.invalid && usernameOrEmail?.touched"
             >
-            <i class="fas fa-envelope absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+            <i class="fas fa-user absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
           </div>
-          <div *ngIf="email?.invalid && email?.touched" class="mt-1 text-sm text-red-600">
-            <div *ngIf="email?.errors?.['required']">E-posta adresi zorunludur</div>
-            <div *ngIf="email?.errors?.['email']">Geçerli bir e-posta adresi girin</div>
+          <div *ngIf="usernameOrEmail?.invalid && usernameOrEmail?.touched" class="mt-1 text-sm text-red-600">
+            <div *ngIf="usernameOrEmail?.errors?.['required']">Kullanıcı adı veya e-posta zorunludur</div>
           </div>
         </div>
 
-        <!-- Password -->
         <div>
           <div class="flex items-center justify-between mb-2">
             <label for="password" class="block text-sm font-medium text-gray-700">
@@ -84,7 +79,6 @@
           </div>
         </div>
 
-        <!-- Remember Me -->
         <div class="flex items-center">
           <input
             id="rememberMe"
@@ -97,7 +91,6 @@
           </label>
         </div>
 
-        <!-- Submit Button -->
         <button
           type="submit"
           [disabled]="isSubmitting"
@@ -111,7 +104,6 @@
         </button>
       </form>
 
-      <!-- Social Login -->
       <div class="mt-6">
         <div class="relative">
           <div class="absolute inset-0 flex items-center">
@@ -141,7 +133,6 @@
       </div>
     </div>
 
-    <!-- Bottom Link -->
     <div class="text-center mt-8">
       <p class="text-sm text-gray-600">
         Hesabınız yok mu?

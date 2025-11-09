@@ -1,0 +1,74 @@
+<!-- 
+  Tailwind ile sabit, dikey bir admin sidebar'ı.
+  bg-gray-900: Koyu arkaplan
+  text-gray-300: Açık renk yazı
+  w-64: Sabit genişlik
+  min-h-screen: Ekran yüksekliği kadar
+-->
+<div class="flex flex-col w-64 min-h-screen bg-gray-900 text-gray-300">
+  
+  <!-- Logo/Marka Alanı -->
+  <div class="h-16 flex items-center justify-center shadow-md">
+    <a routerLink="/admin" class="text-2xl font-bold text-white hover:text-amber-400 transition-colors">
+      BlogApp Admin
+    </a>
+  </div>
+
+  <!-- Navigasyon Linkleri -->
+  <nav class="flex-1 px-4 py-6 space-y-2">
+    <!-- 
+      Her bir link için 'routerLinkActive' kullanıyoruz.
+      Aktif olduğunda 'active-link' class'ını ekleyecek.
+      Bu class'ın stilleri SCSS dosyasında tanımlanacak.
+    -->
+
+    <!-- Dashboard -->
+    <a 
+      routerLink="/admin/dashboard" 
+      routerLinkActive="bg-blue-600 text-white"
+      class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 transition-colors group">
+      <i class="fas fa-tachometer-alt w-5 h-5 mr-3"></i>
+      Dashboard
+    </a>
+
+    <!-- Kategoriler -->
+    <a 
+      routerLink="/admin/categories" 
+      routerLinkActive="bg-blue-600 text-white"
+      class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 transition-colors group">
+      <i class="fas fa-sitemap w-5 h-5 mr-3"></i>
+      Kategoriler
+    </a>
+
+    <!-- Kullanıcılar -->
+    <a 
+      routerLink="/admin/users" 
+      routerLinkActive="bg-blue-600 text-white"
+      class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 transition-colors group">
+      <i class="fas fa-users w-5 h-5 mr-3"></i>
+      Kullanıcılar
+    </a>
+
+    <!-- Roller -->
+    <a 
+      routerLink="/admin/roles" 
+      routerLinkActive="bg-blue-600 text-white"
+      class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 transition-colors group">
+      <i class="fas fa-user-tag w-5 h-5 mr-3"></i>
+      Roller
+    </a>
+
+    <!-- Profil (Alt çizgi ile ayırıyoruz) -->
+    <div class="border-t border-gray-700 pt-4 mt-4">
+      <a 
+        routerLink="/admin/profile" 
+        routerLinkActive="bg-blue-600 text-white"
+        class="flex items-center px-4 py-2.5 rounded-lg hover:bg-gray-700 transition-colors group">
+        <i class="fas fa-user-circle w-5 h-5 mr-3"></i>
+        Profilim
+      </a>
+    </div>
+
+  </nav>
+
+</div>

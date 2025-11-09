@@ -1,1 +1,41 @@
-<p>admin-layout works!</p>
+<!-- 
+  Ana Admin Layout Yapısı
+  'flex' kullanarak sidebar ve ana içeriği yanyana koyuyoruz.
+-->
+<div class="flex h-screen bg-gray-100 overflow-hidden">
+  
+  <!-- 
+    1. SIDEBAR
+    Sidebar'ımız (w-64) sabit olarak burada duracak.
+  -->
+  <app-side-bar></app-side-bar>
+
+  <!-- 
+    2. ANA İÇERİK ALANI
+    'flex-1': Geriye kalan tüm alanı kaplar
+    'flex-col': Topbar ve Main'i altalta sıralar
+    'overflow-hidden': Taşmaları engeller
+  -->
+  <div class="flex-1 flex flex-col overflow-hidden">
+    
+    <!-- 2a. TOPBAR -->
+    <app-top-bar></app-top-bar>
+
+    <!-- 
+      2b. SAYFA İÇERİĞİ (ROUTER OUTLET)
+      'flex-1': Kalan tüm dikey alanı kaplar
+      'overflow-y-auto': Sadece bu alan dikey olarak scroll edilebilir
+    -->
+    <main class="flex-1 overflow-x-hidden overflow-y-auto bg-gray-100 p-6">
+      
+      <!-- 
+        app.routes.ts dosyasındaki 'children' rotaları
+        (Dashboard, Users, Roles...) tam olarak burada render edilecek.
+      -->
+      <router-outlet></router-outlet>
+
+    </main>
+    
+  </div> <!-- Ana içerik alanı bitti -->
+
+</div> <!-- Ana layout bitti -->
