@@ -24,4 +24,8 @@
     <ProjectReference Include="..\BlogApp.DataLayer\BlogApp.DataLayer.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\VisitorUI\" />
+  </ItemGroup>
+
 </Project>
