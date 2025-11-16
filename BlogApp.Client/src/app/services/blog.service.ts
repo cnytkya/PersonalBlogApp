@@ -12,7 +12,8 @@ import { Blog, CreateBlogDto, UpdateBlogDto } from '../models/blogs/blog.model';
 })
 export class BlogService {
   
-  private apiUrl = `${environment.apiUrl}/blogs`;
+  private apiUrl = `${environment.apiUrl}/blogs`;//admin tarafındaki blogs yönetimi için kullanıldı
+  private publicApiUrl = `${environment.apiUrl}/publicblogs`; //visitor tarafındaki slider için
 
   constructor(
     private http: HttpClient,
@@ -76,5 +77,13 @@ export class BlogService {
   deleteBlog(id: number): Observable<void> {
     const headers = this.getAuthHeaders();
     return this.http.delete<void>(`${this.apiUrl}/${id}`, { headers: headers });
+  }
+
+  /**
+   * (GET) Herkese açık, son eklenen 5 blogu getirir.
+   * Bu metot 'getAuthHeaders' ÇAĞIRMAZ, çünkü token'a ihtiyacı yoktur.
+   */
+  getPublicRecentBlogs(): Observable<Blog[]> {
+    return this.http.get<Blog[]>(`${this.publicApiUrl}/recent`);
   }
 }

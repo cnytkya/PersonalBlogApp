@@ -21,6 +21,7 @@ import { UsersComponent } from './components/layouts/admin-layout/pages/users/us
 // AuthGuard'ı import ediyoruz
 import { AuthGuard } from './guards/auth.guard'; 
 import { BlogsComponent } from './components/layouts/admin-layout/pages/blogs/blogs.component';
+import { BlogDetailsComponent } from './components/layouts/visitor-layout/pages/blog-details/blog-details.component';
 
 export const routes: Routes = [
 
@@ -68,6 +69,8 @@ export const routes: Routes = [
     component: VisitorLayoutComponent,
     children: [
       { path: '', component: HomeComponent, title: 'Anasayfa' },
+      { path: 'blog-details', component: BlogDetailsComponent, title: 'Makele Detay Sayfası' },
+
       // { path: 'blogs', component: BlogListComponent, title: 'Blog' },
     ]
   },

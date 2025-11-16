@@ -1,58 +1,31 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { CommonModule } from '@angular/common'; // ngFor için
 import { RouterLink } from '@angular/router';
+import { SliderComponent } from '../../common/slider/slider.component';
+
 
 @Component({
   selector: 'app-home',
-  imports: [CommonModule,RouterLink],
+  standalone: true,
+  // YENİ: SliderComponent'i imports dizisine ekle
+  imports: [CommonModule, RouterLink, SliderComponent], 
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-   features = [
-    {
-      icon: 'fas fa-pencil-alt',
-      title: 'Kolay Yazım',
-      description: 'Zengin metin editörü ile kolayca blog yazıları oluşturun.'
-    },
-    {
-      icon: 'fas fa-users',
-      title: 'Topluluk',
-      description: 'Binlerce yazar ve okuyucudan oluşan topluluğa katılın.'
-    },
-    {
-      icon: 'fas fa-chart-line',
-      title: 'İstatistikler',
-      description: 'Yazılarınızın performansını detaylı istatistiklerle takip edin.'
-    },
-    {
-      icon: 'fas fa-mobile-alt',
-      title: 'Mobil Uyumlu',
-      description: 'Tüm cihazlarda mükemmel görünen responsive tasarım.'
-    }
+
+  // Bu veriler (features, recentPosts)
+  // HTML'inizin alt kısımlarında kullanılıyor, o yüzden kalmalılar.
+  features = [
+    { icon: 'fas fa-rocket', title: 'Hızlı ve Modern', description: 'En son teknolojilerle anında yüklenme hızları.' },
+    { icon: 'fas fa-palette', title: 'Özelleştirilebilir', description: 'Kendi tarzınızı yansıtan temalar ve ayarlar.' },
+    { icon: 'fas fa-users', title: 'Topluluk Odaklı', description: 'Yorum yapın, tartışın ve topluluğa katılın.' },
+    { icon: 'fas fa-shield-alt', title: 'Güvenli ve Güvenilir', description: 'Verileriniz bizimle güvende, kesintisiz hizmet.' }
   ];
 
   recentPosts = [
-    {
-      title: 'Angular ile Modern Web Uygulamaları',
-      excerpt: 'Angular frameworkünü kullanarak nasıl modern web uygulamaları geliştirebileceğinizi öğrenin.',
-      author: 'Ahmet Yılmaz',
-      date: '15 Ara 2023',
-      category: 'Teknoloji'
-    },
-    {
-      title: 'Tailwind CSS ile Hızlı Tasarım',
-      excerpt: 'Tailwind CSS kullanarak nasıl hızlı ve modern arayüzler tasarlayabileceğinizi keşfedin.',
-      author: 'Ayşe Demir',
-      date: '12 Ara 2023',
-      category: 'Tasarım'
-    },
-    {
-      title: 'TypeScript Best Practices',
-      excerpt: 'TypeScript projelerinizde uygulayabileceğiniz en iyi pratikleri ve patternleri inceleyelim.',
-      author: 'Mehmet Kaya',
-      date: '10 Ara 2023',
-      category: 'Programlama'
-    }
+    { category: 'Teknoloji', date: '10 Kasım 2025', title: 'Angular 19 ile Gelenler', excerpt: 'Angular 19, yepyeni özellikleri ve performans iyileştirmeleri ile... ', author: 'Ahmet Y.' },
+    { category: 'Yazılım', date: '8 Kasım 2025', title: '.NET 9\'da API Geliştirme', excerpt: 'ASP.NET 9, minimal API\'ler ve güvenlik konusunda çığır açıyor...', author: 'Elif K.' },
+    { category: 'Kariyer', date: '5 Kasım 2025', title: 'Başarılı Bir Proje Yöneticisi Olmak', excerpt: 'Ekip yönetimi, zaman planlaması ve daha fazlası hakkında ipuçları...', author: 'Can S.' }
   ];
 }
