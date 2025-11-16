@@ -20,6 +20,7 @@ import { UsersComponent } from './components/layouts/admin-layout/pages/users/us
 // --- GUARDS ---
 // AuthGuard'ı import ediyoruz
 import { AuthGuard } from './guards/auth.guard'; 
+import { BlogsComponent } from './components/layouts/admin-layout/pages/blogs/blogs.component';
 
 export const routes: Routes = [
 
@@ -53,6 +54,7 @@ export const routes: Routes = [
       { path: 'roles', component: RolesComponent, title: 'Rol Yönetimi' },
       { path: 'categories', component: CategoriesComponent, title: 'Kategori Yönetimi' },
       { path: 'profile', component: ProfileComponent, title: 'Profilim' },
+      { path: 'blogs', component: BlogsComponent, title: 'Makaleler' },
       { path: 'profile/change-password', component: ChangePasswordComponent, title: 'Şifre Değiştir' },
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]
