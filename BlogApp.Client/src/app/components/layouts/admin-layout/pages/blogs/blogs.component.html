@@ -1,1 +1,140 @@
-<p>blogs works!</p>
+<div classcontainer mx-auto p-4>
+  <!-- 1. SAYFA BAŞLIĞI VE YENİ EKLE BUTONU -->
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Blog Yönetimi</h1>
+    <button (click)="openCreateModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors flex items-center">
+      <i class="fas fa-plus mr-2"></i>
+      Yeni Blog Ekle
+    </button>
+  </div>
+
+  <!-- 2. HATA VE YÜKLENİYOR DURUMLARI -->
+  <div *ngIf="isLoading" class="text-center p-6">
+    <i class="fas fa-spinner fa-spin text-4xl text-blue-500"></i>
+    <p class="text-gray-600 mt-2">Blog Yazıları Yükleniyor...</p>
+  </div>
+  
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
+    <span class="block sm:inline">{{ error }}</span>
+  </div>
+
+  <!-- 3. BLOG TABLOSU -->
+  <div *ngIf="!isLoading && !error" class="bg-white shadow-md rounded-lg overflow-x-auto">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Resim</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Başlık</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Kategori</th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <!-- Veri varsa listele -->
+        <tr *ngFor="let blog of blogs">
+          <!-- Resim (ImgUrl) -->
+          <td class="px-6 py-4 whitespace-nowrap">
+            <img 
+              [src]="blog.imgUrl || 'https://placehold.co/100x60/EEE/AAA?text=Resim+Yok'"
+              alt="{{ blog.title }}"
+              class="w-24 h-16 object-cover rounded-md shadow-sm"
+              onError="this.src='https://placehold.co/100x60/EEE/AAA?text=Hata'"
+            >
+          </td>
+          <!-- Başlık -->
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ blog.title }}</td>
+          <!-- Kategori -->
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">
+            <span class="bg-gray-200 text-gray-800 px-2 py-1 rounded-full text-xs">
+              {{ blog.categoryName || 'Bilinmiyor' }}
+            </span>
+          </td>
+          <!-- İşlemler -->
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+            <button (click)="openEditModal(blog)" class="text-amber-600 hover:text-amber-800 transition-colors" title="Düzenle">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="onDelete(blog.id)" class="text-red-600 hover:text-red-800 transition-colors" title="Sil">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <!-- Veri yoksa -->
+        <tr *ngIf="blogs.length === 0">
+          <td colspan="4" class="px-6 py-4 text-center text-gray-500">
+            Gösterilecek blog yazısı bulunamadı.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- 4. YENİ EKLE / DÜZENLE MODALI -->
+<div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 overflow-y-auto">
+  
+  <!-- Modal Paneli -->
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 my-8">
+    <form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
+      
+      <!-- Modal Başlığı -->
+      <div class="flex justify-between items-center border-b p-4">
+        <h3 class="text-xl font-semibold text-gray-800">
+          {{ currentBlogId === null ? 'Yeni Blog Yazısı Oluştur' : 'Blog Yazısını Düzenle' }}
+        </h3>
+        <button (click)="closeModal()" type="button" class="text-gray-400 hover:text-gray-600">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+
+      <!-- Modal İçeriği (Form) -->
+      <div class="p-6 space-y-4">
+        
+        <!-- Başlık -->
+        <div>
+          <label for="title" class="block text-sm font-medium text-gray-700 mb-2">Başlık</label>
+          <input id="title" type="text" formControlName="title" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" [class.border-red-500]="f['title'].invalid && f['title'].touched">
+          <div *ngIf="f['title'].invalid && f['title'].touched" class="mt-1 text-sm text-red-600">
+            <div *ngIf="f['title'].errors?.['required']">Başlık zorunludur.</div>
+            <div *ngIf="f['title'].errors?.['minlength']">Başlık en az 5 karakter olmalıdır.</div>
+          </div>
+        </div>
+
+        <!-- Resim URL'si (ImgUrl) -->
+        <div>
+          <label for="imgUrl" class="block text-sm font-medium text-gray-700 mb-2">Resim URL'si (Opsiyonel)</label>
+          <input id="imgUrl" type="text" formControlName="imgUrl" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" placeholder="https://ornek.com/resim.jpg">
+        </div>
+
+        <!-- Kategori (Dropdown) -->
+        <div>
+          <label for="categoryId" class="block text-sm font-medium text-gray-700 mb-2">Kategori</label>
+          <select id="categoryId" formControlName="categoryId" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" [class.border-red-500]="f['categoryId'].invalid && f['categoryId'].touched">
+            <option [ngValue]="null" disabled>Kategori seçin...</option>
+            <option *ngFor="let cat of categories" [value]="cat.id">
+              {{ cat.name }}
+            </option>
+          </select>
+          <div *ngIf="f['categoryId'].invalid && f['categoryId'].touched" class="mt-1 text-sm text-red-600">
+            Kategori seçimi zorunludur.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Butonları (Footer) -->
+      <div class="flex justify-end items-center border-t p-4 bg-gray-50 rounded-b-lg space-x-3">
+        <button (click)="closeModal()" type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+          İptal
+        </button>
+        <button 
+          type="submit" 
+          [disabled]="blogForm.invalid"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ currentBlogId === null ? 'Oluştur' : 'Güncelle' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>
