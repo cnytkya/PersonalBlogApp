@@ -1,1 +1,96 @@
-<p>categories works!</p>
+<div classcontainer mx-auto p-4>
+  <div class="flex justify-between items-center mb-6">
+    <h1 class="text-3xl font-bold text-gray-800">Kategori Yönetimi</h1>
+    <button (click)="openCreateModal()" class="bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition-colors flex items-center">
+      <i class="fas fa-plus mr-2"></i>
+      Yeni Kategori Ekle
+    </button>
+  </div>
+
+  <div *ngIf="isLoading" class="text-center p-6">
+    <i class="fas fa-spinner fa-spin text-4xl text-blue-500"></i>
+    <p class="text-gray-600 mt-2">Kategoriler Yükleniyor...</p>
+  </div>
+  
+  <div *ngIf="error" class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded-lg mb-4" role="alert">
+    <span class="block sm:inline">{{ error }}</span>
+  </div>
+
+  <div *ngIf="!isLoading && !error" class="bg-white shadow-md rounded-lg overflow-hidden">
+    <table class="min-w-full divide-y divide-gray-200">
+      <thead class="bg-gray-100">
+        <tr>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">ID</th>
+          <th class="px-6 py-3 text-left text-xs font-medium text-gray-600 uppercase tracking-wider">Kategori Adı</th>
+          <th class="px-6 py-3 text-right text-xs font-medium text-gray-600 uppercase tracking-wider">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-200">
+        <tr *ngFor="let category of categories">
+          <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ category.id }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ category.name }}</td>
+          <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-2">
+            <button (click)="openEditModal(category)" class="text-amber-600 hover:text-amber-800 transition-colors" title="Düzenle">
+              <i class="fas fa-edit"></i>
+            </button>
+            <button (click)="onDelete(category.id)" class="text-red-600 hover:text-red-800 transition-colors" title="Sil">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+        </tr>
+        <tr *ngIf="categories.length === 0">
+          <td colspan="3" class="px-6 py-4 text-center text-gray-500">
+            Gösterilecek kategori bulunamadı.
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60">
+  
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+    <form [formGroup]="categoryForm" (ngSubmit)="onSubmit()">
+      
+      <div class="flex justify-between items-center border-b p-4">
+        <h3 class="text-xl font-semibold text-gray-800">
+          {{ currentCategoryId === null ? 'Yeni Kategori Oluştur' : 'Kategoriyi Düzenle' }}
+        </h3>
+        <button (click)="closeModal()" type="button" class="text-gray-400 hover:text-gray-600">
+          <i class="fas fa-times text-xl"></i>
+        </button>
+      </div>
+
+      <div class="p-6">
+        <label for="name" class="block text-sm font-medium text-gray-700 mb-2">
+          Kategori Adı
+        </label>
+        <input 
+          id="name"
+          type="text" 
+          formControlName="name"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          [class.border-red-500]="name?.invalid && name?.touched"
+        >
+        <div *ngIf="name?.invalid && name?.touched" class="mt-1 text-sm text-red-600">
+          <div *ngIf="name?.errors?.['required']">Kategori adı zorunludur.</div>
+          <div *ngIf="name?.errors?.['minlength']">Kategori adı en az 3 karakter olmalıdır.</div>
+        </div>
+      </div>
+
+      <div class="flex justify-end items-center border-t p-4 bg-gray-50 rounded-b-lg space-x-3">
+        <button (click)="closeModal()" type="button" class="bg-gray-200 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-300 transition-colors">
+          İptal
+        </button>
+        <button 
+          type="submit" 
+          [disabled]="categoryForm.invalid"
+          class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          {{ currentCategoryId === null ? 'Oluştur' : 'Güncelle' }}
+        </button>
+      </div>
+
+    </form>
+  </div>
+</div>

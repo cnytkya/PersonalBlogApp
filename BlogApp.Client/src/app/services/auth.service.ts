@@ -7,7 +7,7 @@ import { environment } from '../env/environment';
 import { Login } from '../models/auth/login.model';
 import { AuthResponse } from '../models/auth/auth-response.model';
 import { Register } from '../models/auth/register.model';
-
+import { jwtDecode } from 'jwt-decode';
 
 // JWT'yi local storage'da saklamak için anahtar
 const AUTH_TOKEN_KEY = 'authToken';
@@ -85,9 +85,44 @@ export class AuthService {
    */
   logout(): void {
     localStorage.removeItem(AUTH_TOKEN_KEY);
-    this.router.navigate(['/login']);
+    this.router.navigate(['/']);
   }
 
-  // İleride, token'dan rol veya kullanıcı adını çözen
-  // helper metotlar da buraya eklenebilir.
+  /**
+   * Token'ı çözer ve içindeki tüm veriyi döndürür.
+   */
+  private getDecodedToken(): any {
+    const token = this.getToken();
+    if (token) {
+      try {
+        // Token'ı çöz
+        return jwtDecode(token);
+      } catch (Error) {
+        // Token geçersizse veya süresi dolmuşsa
+        console.error("Geçersiz token:", Error);
+        this.logout(); // Hatalı token'ı temizle
+        return null;
+      }
+    }
+    return null;
+  }
+
+  /**
+   * O an giriş yapmış kullanıcının ID'sini (JWT'deki 'sub' claim'i) döndürür.
+   */
+  public getCurrentUserId(): string | null {
+    const decodedToken = this.getDecodedToken();
+    // 'sub' (Subject), ASP.NET Identity'nin JWT'de kullandığı standart Kullanıcı ID'si claim'idir.
+    return decodedToken ? decodedToken.sub : null;
+  }
+
+  /**
+   * O an giriş yapmış kullanıcının Adını (JWT'deki 'firstName' claim'i) döndürür.
+   * (Bunu TopBar'da "Hoşgeldin Admin" demek için kullanabiliriz)
+   */
+  public getCurrentUserFirstName(): string | null {
+    const decodedToken = this.getDecodedToken();
+    // API'deki TokenService'te 'firstName' adıyla özel bir claim eklemiştik.
+    return decodedToken ? decodedToken.firstName : null;
+  }
 }

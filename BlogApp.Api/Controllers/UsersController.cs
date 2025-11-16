@@ -1,7 +1,11 @@
-﻿using BlogApp.ApplicationLayer.DTOs.Users;
+﻿using BlogApp.ApplicationLayer.DTOs.Auth;
+using BlogApp.ApplicationLayer.DTOs.Users;
 using BlogApp.ApplicationLayer.Services.Interface;
+using BlogApp.EntityLayer.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace BlogApp.Api.Controllers
 {
@@ -11,19 +15,21 @@ namespace BlogApp.Api.Controllers
     /// </summary>
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize(Roles = "Admin")] // <-- Bu satır, tüm endpoint'leri Admin rolüyle korur
+    [Authorize(Roles = "Admin")]  //<-- Bu satır, tüm endpoint'leri Admin rolüyle korur
     public class UsersController : ControllerBase
     {
         // Controller, somut UserService sınıfı yerine IUserService interface'ine bağımlıdır.
         private readonly IUserService _userService;
+        private readonly UserManager<AppUser> _userManager;
 
         /// <summary>
         /// UsersController için dependency injection ile IUserService'i enjekte eder.
         /// </summary>
         /// <param name="userService">Kullanıcı işlemlerini yürütecek servis.</param>
-        public UsersController(IUserService userService)
+        public UsersController(IUserService userService, UserManager<AppUser> userManager)
         {
             _userService = userService;
+            _userManager = userManager;
         }
 
         #region --- READ (Okuma) Endpoint'leri ---
@@ -34,7 +40,7 @@ namespace BlogApp.Api.Controllers
         /// <returns>UserDto listesi.</returns>
         // GET: api/Users
         [HttpGet]
-        [AllowAnonymous]//kullanıcı admin olmasa yani yetkisi olmasa bile bütün kullanıcılara erişimi olsun.
+        //[AllowAnonymous]kullanıcı admin olmasa yani yetkisi olmasa bile bütün kullanıcılara erişimi olsun.
         public async Task<IActionResult> GetUsers()
         {
             var users = await _userService.GetAllUsersAsync();
@@ -49,7 +55,7 @@ namespace BlogApp.Api.Controllers
         /// <returns>UserDto veya bulunamazsa 404 Not Found.</returns>
         // GET: api/Users/id/{id}
         [HttpGet("id/{id}")]
-        [AllowAnonymous]
+        //[AllowAnonymous]
         public async Task<IActionResult> GetUserById(string id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -70,6 +76,7 @@ namespace BlogApp.Api.Controllers
         /// <returns>UserDto veya bulunamazsa 404 Not Found.</returns>
         // GET: api/Users/by-username/{username}
         [HttpGet("by-username/{username}")]
+        //[AllowAnonymous]
         public async Task<IActionResult> GetUserByUsername(string username)
         {
             var user = await _userService.GetUserByUsernameAsync(username);
@@ -170,5 +177,44 @@ namespace BlogApp.Api.Controllers
         }
 
         #endregion
+
+        /// <summary>
+        /// O an oturum açmış (giriş yapmış) kullanıcının şifresini değiştirir.
+        /// </summary>
+        [HttpPost("change-password")]
+        public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
+        {
+            // 1. Kullanıcı ID'sini JWT token'ından (Claim'den) al
+            // HttpContext.User, [Authorize] sayesinde o anki kullanıcıyı bilir.
+            var userId = HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("Kullanıcı kimliği bulunamadı.");
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+            if (user == null)
+            {
+                return NotFound("Kullanıcı bulunamadı.");
+            }
+
+            // 2. Identity'nin şifre değiştirme metodunu çağır
+            var result = await _userManager.ChangePasswordAsync(
+                user,
+                dto.CurrentPassword,
+                dto.NewPassword
+            );
+
+            // 3. Sonucu döndür
+            if (!result.Succeeded)
+            {
+                // Hata mesajlarını (örn: "Mevcut şifre yanlış") Angular'a gönder
+                return BadRequest(result.Errors);
+            }
+
+            // Başarılı. Angular <void> bekliyor.
+            return NoContent();
+        }
     }
 }
