@@ -1,11 +1,8 @@
-﻿using BlogApp.DataLayer.Persistence;
-using BlogApp.ApplicationLayer.DTOs.Blogs;
+﻿using BlogApp.ApplicationLayer.DTOs.Blogs;
+using BlogApp.DataLayer.Persistence;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BlogApp.Api.Controllers
 {

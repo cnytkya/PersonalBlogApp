@@ -83,7 +83,7 @@ namespace BlogApp.Api.Controllers
 
             // DTO'dan gelen verilerle (Content dahil) entity'yi güncelle
             blogEntity.Title = updateDto.Title;
-            blogEntity.Content = updateDto.Content; // GÜNCELLENDİ
+            blogEntity.Content = updateDto.Content; 
             blogEntity.ImgUrl = updateDto.ImgUrl;
             blogEntity.CategoryId = updateDto.CategoryId;
 
@@ -106,7 +106,7 @@ namespace BlogApp.Api.Controllers
             var blogEntity = new Blog
             {
                 Title = createDto.Title,
-                Content = createDto.Content, // GÜNCELLENDİ
+                Content = createDto.Content, 
                 ImgUrl = createDto.ImgUrl,
                 CategoryId = createDto.CategoryId
             };
@@ -118,7 +118,7 @@ namespace BlogApp.Api.Controllers
             {
                 Id = blogEntity.Id,
                 Title = blogEntity.Title,
-                Content = blogEntity.Content, // GÜNCELLENDİ
+                Content = blogEntity.Content,
                 ImgUrl = blogEntity.ImgUrl,
                 CategoryId = blogEntity.CategoryId,
                 CategoryName = (await _context.Categories.FindAsync(blogEntity.CategoryId))?.Name

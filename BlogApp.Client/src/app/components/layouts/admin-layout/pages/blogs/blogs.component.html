@@ -1,4 +1,4 @@
-<div classcontainer mx-auto p-4>
+<div class="container mx-auto p-4">
   <!-- 1. SAYFA BAŞLIĞI VE YENİ EKLE BUTONU -->
   <div class="flex justify-between items-center mb-6">
     <h1 class="text-3xl font-bold text-gray-800">Blog Yönetimi</h1>
@@ -30,9 +30,8 @@
         </tr>
       </thead>
       <tbody class="bg-white divide-y divide-gray-200">
-        <!-- Veri varsa listele -->
         <tr *ngFor="let blog of blogs">
-          <!-- Resim (ImgUrl) -->
+          <!-- Resim -->
           <td class="px-6 py-4 whitespace-nowrap">
             <img 
               [src]="blog.imgUrl || 'https://placehold.co/100x60/EEE/AAA?text=Resim+Yok'"
@@ -73,8 +72,8 @@
 <!-- 4. YENİ EKLE / DÜZENLE MODALI -->
 <div *ngIf="isModalOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-60 overflow-y-auto">
   
-  <!-- Modal Paneli -->
-  <div class="bg-white rounded-lg shadow-xl w-full max-w-lg mx-4 my-8">
+  <!-- Modal Paneli (Genişliği artırdık: max-w-2xl) -->
+  <div class="bg-white rounded-lg shadow-xl w-full max-w-2xl mx-4 my-8">
     <form [formGroup]="blogForm" (ngSubmit)="onSubmit()">
       
       <!-- Modal Başlığı -->
@@ -98,6 +97,24 @@
             <div *ngIf="f['title'].errors?.['required']">Başlık zorunludur.</div>
             <div *ngIf="f['title'].errors?.['minlength']">Başlık en az 5 karakter olmalıdır.</div>
           </div>
+        </div>
+
+        <!-- YENİ: İçerik (Textarea) -->
+        <div>
+          <label for="content" class="block text-sm font-medium text-gray-700 mb-2">İçerik (HTML destekler)</label>
+          <textarea 
+            id="content" 
+            formControlName="content" 
+            rows="8" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 font-mono text-sm" 
+            placeholder="Blog içeriğini buraya yazın..."
+            [class.border-red-500]="f['content'].invalid && f['content'].touched"
+          ></textarea>
+          <div *ngIf="f['content'].invalid && f['content'].touched" class="mt-1 text-sm text-red-600">
+            <div *ngIf="f['content'].errors?.['required']">İçerik zorunludur.</div>
+            <div *ngIf="f['content'].errors?.['minlength']">İçerik en az 50 karakter olmalıdır.</div>
+          </div>
+          <p class="text-xs text-gray-500 mt-1">İpucu: Paragraf için &lt;p&gt;, kalın yazı için &lt;strong&gt; kullanabilirsiniz.</p>
         </div>
 
         <!-- Resim URL'si (ImgUrl) -->

@@ -5,6 +5,7 @@
 export interface Blog {
   id: number;
   title: string;
+  content:string,
   imgUrl?: string | null;
   categoryId: number;
   categoryName?: string | null;
@@ -15,6 +16,7 @@ export interface Blog {
  */
 export interface CreateBlogDto {
   title: string;
+  content:string,
   imgUrl?: string | null;
   categoryId: number;
 }
@@ -25,6 +27,7 @@ export interface CreateBlogDto {
 export interface UpdateBlogDto {
   id: number;
   title: string;
+  content:string,
   imgUrl?: string | null;
   categoryId: number;
 }
