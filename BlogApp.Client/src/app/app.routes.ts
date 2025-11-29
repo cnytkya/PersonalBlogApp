@@ -69,7 +69,8 @@ export const routes: Routes = [
     component: VisitorLayoutComponent,
     children: [
       { path: '', component: HomeComponent, title: 'Anasayfa' },
-      { path: 'blog-details', component: BlogDetailsComponent, title: 'Makele Detay Sayfası' },
+      // ':id' kısmı değişkendir (örn: /blogs/1, /blogs/20)
+      { path: 'blogs/:id', component: BlogDetailsComponent, title: 'Blog Detayı' },
 
       // { path: 'blogs', component: BlogListComponent, title: 'Blog' },
     ]

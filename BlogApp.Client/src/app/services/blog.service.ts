@@ -86,4 +86,8 @@ export class BlogService {
   getPublicRecentBlogs(): Observable<Blog[]> {
     return this.http.get<Blog[]>(`${this.publicApiUrl}/recent`);
   }
+
+  getPublicBlogById(id: number): Observable<Blog> {
+    return this.http.get<Blog>(`${this.publicApiUrl}/${id}`);
+  }
 }

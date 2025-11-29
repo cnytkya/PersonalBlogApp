@@ -1,19 +1,20 @@
 import { Component, OnInit, OnDestroy, HostListener, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router'; // Yönlendirme için gerekli
 import { finalize } from 'rxjs/operators';
-import { Blog } from '../../../../../models/blogs/blog.model';
+// Model yolunu projenize göre kontrol edin (blog/blog.model veya blogs/blog.model)
 import { BlogService } from '../../../../../services/blog.service';
+import { Blog } from '../../../../../models/blogs/blog.model';
 
 @Component({
   selector: 'app-slider',
   standalone: true,
-  imports: [CommonModule, RouterLink],
+  imports: [CommonModule, RouterLink], // RouterLink burada olmalı
   templateUrl: './slider.component.html',
   styleUrl: './slider.component.scss'
 })
 export class SliderComponent implements OnInit, OnDestroy {
-  // Signals for modern Angular approach
+  // Signals
   recentBlogs = signal<Blog[]>([]);
   isLoading = signal(true);
   error = signal<string | null>(null);
@@ -39,7 +40,7 @@ export class SliderComponent implements OnInit, OnDestroy {
     this.clearAutoPlay();
   }
 
-  // Klavye navigasyonu için
+  // --- KLAVYE NAVİGASYONU ---
   @HostListener('window:keydown', ['$event'])
   handleKeyboardEvent(event: KeyboardEvent) {
     if (this.recentBlogs().length <= 1) return;
@@ -61,7 +62,7 @@ export class SliderComponent implements OnInit, OnDestroy {
     }
   }
 
-  // Touch events for mobile swipe
+  // --- MOBİL SWIPE NAVİGASYONU ---
   @HostListener('touchstart', ['$event'])
   onTouchStart(event: TouchEvent) {
     this.touchStartX = event.changedTouches[0].screenX;
@@ -86,6 +87,7 @@ export class SliderComponent implements OnInit, OnDestroy {
     }
   }
 
+  // --- VERİ YÜKLEME ---
   loadRecentBlogs(): void {
     this.isLoading.set(true);
     this.error.set(null);
@@ -100,14 +102,13 @@ export class SliderComponent implements OnInit, OnDestroy {
         }
       },
       error: (err) => {
-        this.error.set("Son bloglar yüklenemedi. Lütfen daha sonra tekrar deneyin.");
+        this.error.set("Son bloglar yüklenemedi.");
         console.error('Blog yükleme hatası:', err);
       }
     });
   }
 
-  // --- SLIDER KONTROLLERİ ---
-
+  // --- SLIDER MANTIĞI ---
   startAutoPlay(): void {
     if (this.isAutoPlaying() && this.recentBlogs().length > 1) {
       this.clearAutoPlay();
@@ -126,7 +127,6 @@ export class SliderComponent implements OnInit, OnDestroy {
 
   toggleAutoPlay(): void {
     this.isAutoPlaying.set(!this.isAutoPlaying());
-    
     if (this.isAutoPlaying()) {
       this.startAutoPlay();
     } else {
@@ -136,36 +136,22 @@ export class SliderComponent implements OnInit, OnDestroy {
 
   nextSlide(): void {
     if (this.recentBlogs().length === 0) return;
-    
     const nextSlide = (this.currentSlide() + 1) % this.recentBlogs().length;
     this.currentSlide.set(nextSlide);
-    
-    // Auto-play'i sıfırla (kullanıcı etkileşimi sonrası)
-    if (this.isAutoPlaying()) {
-      this.restartAutoPlay();
-    }
+    if (this.isAutoPlaying()) this.restartAutoPlay();
   }
 
   prevSlide(): void {
     if (this.recentBlogs().length === 0) return;
-    
     const prevSlide = (this.currentSlide() - 1 + this.recentBlogs().length) % this.recentBlogs().length;
     this.currentSlide.set(prevSlide);
-    
-    // Auto-play'i sıfırla (kullanıcı etkileşimi sonrası)
-    if (this.isAutoPlaying()) {
-      this.restartAutoPlay();
-    }
+    if (this.isAutoPlaying()) this.restartAutoPlay();
   }
 
   goToSlide(index: number): void {
     if (index >= 0 && index < this.recentBlogs().length) {
       this.currentSlide.set(index);
-      
-      // Auto-play'i sıfırla (kullanıcı etkileşimi sonrası)
-      if (this.isAutoPlaying()) {
-        this.restartAutoPlay();
-      }
+      if (this.isAutoPlaying()) this.restartAutoPlay();
     }
   }
 
@@ -174,38 +160,19 @@ export class SliderComponent implements OnInit, OnDestroy {
     this.startAutoPlay();
   }
 
-  // Yardımcı metodlar
   getSlideProgress(): number {
     return ((this.currentSlide() + 1) / this.recentBlogs().length) * 100;
-  }
-
-  // Blog özeti oluşturma (eğer modelde yoksa)
-  generateSummary(content: string, maxLength: number = 150): string {
-    if (!content) return 'Bu blog yazısını okumak için devamını oku butonuna tıklayın.';
-    
-    const cleanedContent = content.replace(/<[^>]*>/g, ''); // HTML tag'larını temizle
-    return cleanedContent.length > maxLength 
-      ? cleanedContent.substring(0, maxLength) + '...' 
-      : cleanedContent;
-  }
-
-  // Resim yükleme hatası durumunda fallback
-  handleImageError(event: Event): void {
-    const imgElement = event.target as HTMLImageElement;
-    imgElement.src = 'https://placehold.co/1920x1080/E0E7FF/333?text=Resim+Yok';
   }
 
   // Kategori rengi belirleme
   getCategoryColor(categoryName: string): string {
     const colors: { [key: string]: string } = {
       '.NET Core': 'from-blue-400 to-blue-600',
-      'Yaşam': 'from-green-400 to-green-600',
-      'Eğitim': 'from-purple-400 to-purple-600',
-      'Sanat': 'from-pink-400 to-pink-600',
-      'Spor': 'from-red-400 to-red-600',
+      'Angular': 'from-red-500 to-pink-600',
+      'Teknoloji': 'from-purple-400 to-purple-600',
+      'Yazılım': 'from-green-400 to-green-600',
       'default': 'from-amber-400 to-amber-500'
     };
-
     return colors[categoryName] || colors['default'];
   }
 }
